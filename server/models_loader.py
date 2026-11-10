@@ -21,12 +21,18 @@ def get_export_dir() -> Path:
     Menemukan direktori model_export berdasarkan lokasi script atau environment variable.
     """
     env_dir = os.environ.get("MODEL_EXPORT_DIR")
-    if env_dir and Path(env_dir).exists():
-        return Path(env_dir)
+    if env_dir:
+        p = Path(env_dir)
+        if p.exists() and (p / "classes.json").exists():
+            return p
+        p_server = Path(__file__).resolve().parent / p
+        if p_server.exists() and (p_server / "classes.json").exists():
+            return p_server
 
     possible_dirs = [
-        Path(__file__).resolve().parent.parent / "model_export",
         Path(__file__).resolve().parent / "model_export",
+        Path(__file__).resolve().parent.parent / "model_export",
+        Path("server/model_export"),
         Path("model_export"),
     ]
     for d in possible_dirs:
