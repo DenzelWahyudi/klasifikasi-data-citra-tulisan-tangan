@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 import logging
-from typing import Dict
+import os
+from pathlib import Path
+from typing import Dict, List
 
 from fastapi import FastAPI, File, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +18,25 @@ from schemas import (
 )
 
 logger = logging.getLogger("uvicorn")
+
+# Memuat konfigurasi dari file .env jika ada
+env_path = Path(__file__).resolve().parent / ".env"
+if env_path.exists():
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(dotenv_path=env_path)
+    except ImportError:
+        # Fallback parsing sederhana jika python-dotenv tidak terpasang
+        with open(env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    k = k.strip()
+                    v = v.strip().strip("\"'")
+                    if k not in os.environ:
+                        os.environ[k] = v
 
 
 @asynccontextmanager
@@ -45,9 +66,15 @@ app = FastAPI(
 )
 
 # Konfigurasi CORS agar frontend (React/Vite) dapat mengakses API
+cors_origins_env = os.environ.get("CORS_ORIGINS", "*")
+if cors_origins_env.strip() == "*":
+    allowed_origins = ["*"]
+else:
+    allowed_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Mengizinkan seluruh origin termasuk http://localhost:5173
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -231,4 +258,7 @@ async def predict_all_endpoint(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", 8000))
+
+    uvicorn.run("main:app", host=host, port=port, reload=True)
