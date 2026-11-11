@@ -8,12 +8,12 @@ export interface SampleImage {
 }
 
 export const SAMPLE_IMAGES: SampleImage[] = [
-  { id: '1', name: 'sample_1.jpg', label: 'Sampel #1', path: '/samples/sample_1.jpg' },
-  { id: '2', name: 'sample_2.jpg', label: 'Sampel #2', path: '/samples/sample_2.jpg' },
-  { id: '7', name: 'sample_7.jpg', label: 'Sampel #7', path: '/samples/sample_7.jpg' },
-  { id: '16', name: 'sample_16.jpg', label: 'Sampel #16', path: '/samples/sample_16.jpg' },
-  { id: '20', name: 'sample_20.jpg', label: 'Sampel #20', path: '/samples/sample_20.jpg' },
-  { id: '45', name: 'sample_45.jpg', label: 'Sampel #45', path: '/samples/sample_45.jpg' },
+  { id: 'A250002', name: 'sample_A250002.jpg', label: 'A250002', path: '/samples/sample_A250002.jpg' },
+  { id: 'A250007', name: 'sample_A250007.jpg', label: 'A250007', path: '/samples/sample_A250007.jpg' },
+  { id: 'A250014', name: 'sample_A250014.jpg', label: 'A250014', path: '/samples/sample_A250014.jpg' },
+  { id: 'A250015', name: 'sample_A250015.jpg', label: 'A250015', path: '/samples/sample_A250015.jpg' },
+  { id: 'A250023', name: 'sample_A250023.jpg', label: 'A250023', path: '/samples/sample_A250023.jpg' },
+  { id: 'A250041', name: 'sample_A250041.jpg', label: 'A250041', path: '/samples/sample_A250041.jpg' },
 ]
 
 export const AVAILABLE_MODELS: ModelOption[] = [

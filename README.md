@@ -112,7 +112,6 @@ klasifikasi-data-citra-tulisan-tangan/
 │   ├── requirements.txt                  # Dependensi pustaka Python
 │   └── .env.example                      # Contoh variabel lingkungan server
 │
-├── sample_pictures/                      # Kumpulan 55 citra tulisan tangan asli untuk pengujian
 ├── design-reference/                     # Referensi desain visual antarmuka
 ├── UAS_Klasifikasi_Data_Citra_Export.ipynb # Notebook eksperimen, pelatihan, & ekspor model
 ├── AGENTS.md                             # Pedoman aturan operasional AI Assistant
