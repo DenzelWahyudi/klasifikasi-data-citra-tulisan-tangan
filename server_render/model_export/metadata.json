@@ -59,6 +59,8 @@
     ],
     "channels": 3,
     "normalization": "div_255",
+    "preprocessing": "letterbox_128x128",
+    "num_glcm_features": 24,
     "glcm_config": {
         "properties": [
             "contrast",
@@ -76,6 +78,7 @@
             45,
             90,
             135
-        ]
+        ],
+        "total_features": 24
     }
 }
