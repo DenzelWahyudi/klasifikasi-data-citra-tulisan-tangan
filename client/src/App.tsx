@@ -23,10 +23,10 @@ import {
 import type { AlgorithmResult, HealthResponse } from './types'
 
 export function App() {
-  // State pilihan model: Default ketiga model terpilih
+  // State pilihan model: Default belum memilih model apapun
   const [selectedModels, setSelectedModels] = useState<
     ('svm' | 'rf' | 'mobilenetv2')[]
-  >(['svm', 'rf', 'mobilenetv2'])
+  >([])
 
   // State citra
   const [currentFile, setCurrentFile] = useState<File | null>(null)

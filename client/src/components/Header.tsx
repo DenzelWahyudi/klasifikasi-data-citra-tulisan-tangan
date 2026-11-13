@@ -86,7 +86,7 @@ export const Header: FC<HeaderProps> = ({
             className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-xs hover:bg-zinc-50 hover:border-zinc-300 transition-all"
           >
             <Database className="h-3.5 w-3.5 text-zinc-500" />
-            <span>51 Kelas Mahasiswa</span>
+            <span>51 Mahasiswa</span>
           </button>
         </div>
       </div>

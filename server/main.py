@@ -152,7 +152,7 @@ def health_check():
     )
 
 
-@app.get("/api/classes", response_model=ClassListResponse, summary="Daftar Kelas Mahasiswa")
+@app.get("/api/classes", response_model=ClassListResponse, summary="Daftar Mahasiswa")
 def get_classes():
     """
     Mengembalikan daftar seluruh kelas/ID mahasiswa yang terdaftar pada model.

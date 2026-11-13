@@ -34,7 +34,7 @@ export const ClassesDrawer: FC<ClassesDrawerProps> = ({
             </div>
             <div>
               <h3 className="text-base font-semibold text-zinc-900 tracking-tight">
-                Daftar Kelas Mahasiswa Terdaftar
+                Daftar Mahasiswa Terdaftar
               </h3>
               <p className="text-xs text-zinc-500">
                 Total {classes.length} label/ID mahasiswa yang dipelajari oleh model
@@ -68,7 +68,7 @@ export const ClassesDrawer: FC<ClassesDrawerProps> = ({
         <div className="flex-1 overflow-y-auto py-3 pr-1 space-y-2">
           {filtered.length === 0 ? (
             <p className="text-center text-xs text-zinc-400 py-8">
-              Tidak ada kelas mahasiswa yang cocok dengan pencarian "{searchTerm}"
+              Tidak ada mahasiswa yang cocok dengan pencarian "{searchTerm}"
             </p>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
@@ -89,7 +89,7 @@ export const ClassesDrawer: FC<ClassesDrawerProps> = ({
 
         {/* Footer */}
         <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-500">
-          <span>Menampilkan {filtered.length} dari {classes.length} kelas</span>
+          <span>Menampilkan {filtered.length} dari {classes.length} mahasiswa</span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded-full bg-zinc-900 text-white hover:bg-black font-medium transition-colors"
