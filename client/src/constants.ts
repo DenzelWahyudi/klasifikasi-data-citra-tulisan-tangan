@@ -45,3 +45,7 @@ export const AVAILABLE_MODELS: ModelOption[] = [
     tagColor: 'bg-purple-50 text-purple-700 border-purple-200',
   },
 ]
+
+export const DATASET_URL =
+  'https://drive.google.com/drive/folders/18UY9zQHOQ68EhoRDoGf3jj9ZWEnBbqXe?usp=drive_link'
+

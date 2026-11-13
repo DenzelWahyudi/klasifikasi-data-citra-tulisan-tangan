@@ -5,6 +5,7 @@ from PIL import Image
 from skimage.feature import graycomatrix, graycoprops
 
 TARGET_IMAGE_SIZE = (128, 128)
+MOBILENET_IMAGE_SIZE = (224, 224)
 GLCM_PROPERTIES = ['contrast', 'dissimilarity', 'homogeneity', 'energy', 'correlation', 'ASM']
 GLCM_DISTANCES = [1]
 GLCM_ANGLES = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]
@@ -21,6 +22,24 @@ def load_image_from_bytes(image_bytes: bytes) -> Image.Image:
         return image
     except Exception as exc:
         raise ValueError(f"File yang diunggah bukan citra yang valid atau rusak: {exc}") from exc
+
+
+def crop_text_roi(image: Image.Image, threshold: int = 210, pad: int = 10) -> Image.Image:
+    """
+    Memotong area kosong di sekitar tulisan tangan agar fokus pada goresan teks.
+    """
+    gray = image.convert('L')
+    arr = np.array(gray)
+    mask = arr < threshold
+    if not np.any(mask):
+        return image
+    y_indices = np.where(mask.any(axis=1))[0]
+    x_indices = np.where(mask.any(axis=0))[0]
+    ymin = max(0, y_indices[0] - pad)
+    ymax = min(arr.shape[0], y_indices[-1] + pad)
+    xmin = max(0, x_indices[0] - pad)
+    xmax = min(arr.shape[1], x_indices[-1] + pad)
+    return image.crop((xmin, ymin, xmax, ymax))
 
 
 def resize_with_letterbox(
@@ -52,7 +71,7 @@ def resize_with_letterbox(
 def extract_glcm_features(image: Image.Image) -> np.ndarray:
     """
     Mengekstraksi 24 fitur tekstur GLCM (6 properti Haralick x 4 orientasi sudut)
-    pada citra grayscale berukuran 128x128 yang diproses dengan letterboxing.
+    pada citra grayscale berukuran 128x128 yang diproses dengan cropping ROI dan letterboxing.
 
     6 properti: Contrast, Dissimilarity, Homogeneity, Energy, Correlation, ASM
     4 sudut: 0, 45, 90, 135 derajat
@@ -61,8 +80,9 @@ def extract_glcm_features(image: Image.Image) -> np.ndarray:
     Returns:
         np.ndarray: Array 2D berdimensi (1, 24) bertipe float64.
     """
-    # 1. Letterbox ke 128x128 & konversi ke Grayscale ('L')
-    lb_img = resize_with_letterbox(image, target_size=TARGET_IMAGE_SIZE, bg_color=230)
+    # 1. Cropping ROI, letterbox ke 128x128 & konversi ke Grayscale ('L')
+    cropped_img = crop_text_roi(image)
+    lb_img = resize_with_letterbox(cropped_img, target_size=TARGET_IMAGE_SIZE, bg_color=230)
     gray_img = lb_img.convert('L')
     img_arr = np.array(gray_img, dtype=np.uint8)
 
@@ -87,18 +107,23 @@ def extract_glcm_features(image: Image.Image) -> np.ndarray:
     return np.array([features], dtype=np.float64)
 
 
-def preprocess_for_mobilenet(image: Image.Image) -> np.ndarray:
+def preprocess_for_mobilenet(
+    image: Image.Image,
+    target_size: Tuple[int, int] = MOBILENET_IMAGE_SIZE
+) -> np.ndarray:
     """
     Melakukan preprocessing citra RGB untuk inferensi MobileNetV2:
-    - Letterboxing ke (128, 128) dengan warna latar kertas netral (230, 230, 230)
+    - Cropping area teks (ROI)
+    - Letterboxing ke ukuran target (default: 224, 224) dengan warna latar netral (230, 230, 230)
     - Konversi ke RGB
-    - Normalisasi piksel ke rentang [0.0, 1.0] (div_255)
+    - Normalisasi piksel ke rentang [-1.0, 1.0]
     - Menambahkan dimensi batch
 
     Returns:
-        np.ndarray: Tensor berdimensi (1, 128, 128, 3) bertipe float32.
+        np.ndarray: Tensor berdimensi (1, H, W, 3) bertipe float32.
     """
-    lb_img = resize_with_letterbox(image, target_size=TARGET_IMAGE_SIZE, bg_color=DEFAULT_BG_COLOR)
+    cropped_img = crop_text_roi(image)
+    lb_img = resize_with_letterbox(cropped_img, target_size=target_size, bg_color=DEFAULT_BG_COLOR)
     rgb_img = lb_img.convert('RGB')
-    img_arr = np.array(rgb_img, dtype=np.float32) / 255.0
+    img_arr = (np.array(rgb_img, dtype=np.float32) / 127.5) - 1.0
     return np.expand_dims(img_arr, axis=0)

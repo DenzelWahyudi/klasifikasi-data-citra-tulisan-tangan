@@ -98,7 +98,8 @@ class ModelManager:
             raise FileNotFoundError("File model MobileNetV2 (.keras / .h5) tidak ditemukan!")
 
         # Warm-up MobileNetV2 untuk menghindari latency pada inferensi pertama
-        dummy_input = np.zeros((1, 128, 128, 3), dtype=np.float32)
+        input_shape = self.mobilenet_model.input_shape[1:]
+        dummy_input = np.zeros((1, *input_shape), dtype=np.float32)
         _ = self.mobilenet_model.predict(dummy_input, verbose=0)
 
         self.is_loaded = True
@@ -181,7 +182,9 @@ class ModelManager:
 
         t0 = time.perf_counter()
         # 1. Preprocessing RGB & normalisasi
-        tensor = preprocess_for_mobilenet(image)
+        input_shape = self.mobilenet_model.input_shape[1:3]
+        target_size = (input_shape[0], input_shape[1]) if input_shape[0] else (224, 224)
+        tensor = preprocess_for_mobilenet(image, target_size=target_size)
         # 2. Prediksi Deep Learning
         probs = self.mobilenet_model.predict(tensor, verbose=0)[0]
         elapsed_ms = (time.perf_counter() - t0) * 1000

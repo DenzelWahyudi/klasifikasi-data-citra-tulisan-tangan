@@ -7,6 +7,8 @@ import {
   Terminal,
   CheckCircle,
   RotateCcw,
+  FolderOpen,
+  ExternalLink,
 } from 'lucide-react'
 import { Header } from './components/Header'
 import { ModelSelector } from './components/ModelSelector'
@@ -14,7 +16,7 @@ import { ImageUploader } from './components/ImageUploader'
 import { PredictionCard } from './components/PredictionCard'
 import { ConsensusBanner } from './components/ConsensusBanner'
 import { ClassesDrawer } from './components/ClassesDrawer'
-import { AVAILABLE_MODELS } from './constants'
+import { AVAILABLE_MODELS, DATASET_URL } from './constants'
 import {
   checkServerHealth,
   getClassList,
@@ -345,13 +347,52 @@ export function App() {
             </div>
           </section>
         )}
+        {/* Raw Dataset Access Section */}
+        <section className="rounded-3xl border border-zinc-200/80 bg-white p-6 sm:p-7 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="flex items-start sm:items-center gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-800 border border-zinc-200/60">
+                <FolderOpen className="h-5 w-5" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-semibold text-zinc-900 text-sm sm:text-base">
+                  Dataset Mentah Tulisan Tangan Mahasiswa
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed max-w-2xl">
+                  Akses folder Google Drive yang memuat seluruh citra tulisan tangan mentah dari 51 kelas mahasiswa yang digunakan untuk melatih dan mengevaluasi model.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href={DATASET_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-5 py-2.5 text-xs sm:text-sm font-medium text-white shadow-xs hover:bg-black transition-colors shrink-0"
+            >
+              <span>Buka Google Drive Dataset</span>
+              <ExternalLink className="h-3.5 w-3.5 text-zinc-300" />
+            </a>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
       <footer className="w-full border-t border-zinc-200/80 bg-white py-8 mt-16 text-center text-xs text-zinc-500">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© 2026 Proyek Klasifikasi Citra Tulisan Tangan Mahasiswa</p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <a
+              href={DATASET_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-zinc-700 hover:text-zinc-950 font-medium transition-colors"
+            >
+              <FolderOpen className="h-3.5 w-3.5 text-zinc-500" />
+              <span>Dataset Mentah</span>
+              <ExternalLink className="h-3 w-3 text-zinc-400" />
+            </a>
+            <span>•</span>
             <span>FastAPI Backend</span>
             <span>•</span>
             <span>GLCM Haralick + SVM & RF</span>

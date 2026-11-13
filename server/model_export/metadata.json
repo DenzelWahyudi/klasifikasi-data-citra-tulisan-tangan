@@ -54,12 +54,12 @@
         "A250052"
     ],
     "image_size": [
-        128,
-        128
+        224,
+        224
     ],
     "channels": 3,
-    "normalization": "div_255",
-    "preprocessing": "letterbox_128x128",
+    "normalization": "mobilenet_v2_range",
+    "preprocessing": "crop_roi_letterbox_224x224",
     "num_glcm_features": 24,
     "glcm_config": {
         "properties": [
