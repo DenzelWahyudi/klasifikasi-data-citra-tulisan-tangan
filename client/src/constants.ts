@@ -39,7 +39,7 @@ export const AVAILABLE_MODELS: ModelOption[] = [
     id: 'mobilenetv2',
     name: 'MobileNetV2',
     badge: 'Deep Learning',
-    technique: 'Transfer Learning CNN (128x128 RGB)',
+    technique: 'Transfer Learning CNN (224x224 RGB)',
     description:
       'Arsitektur Convolutional Neural Network modern yang mengekstraksi representasi spasial mendalam langsung dari citra piksel.',
     tagColor: 'bg-purple-50 text-purple-700 border-purple-200',
